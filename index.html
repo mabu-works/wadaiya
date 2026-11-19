@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>話題ガチャ | まぶ鯖</title>
+<meta name="description" content="雑談の話題に困ったらガチャを回そう。全109件の話題からランダムで1つ引ける、chat-topic-bot のWeb版です。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-deco" aria-hidden="true"><span>✦</span><span>✧</span><span>★</span><span>✦</span><span>✧</span></div>
+
+<header class="site-header">
+  <div class="logo">🎰</div>
+  <h1>話題ガチャ</h1>
+  <p class="tagline">雑談のネタに困ったら、回してみよう。<br>chat-topic-bot の Web版です。</p>
+  <div class="stats-bar" aria-label="話題の数">
+    <div class="stat"><span class="stat-num" id="statTotal">109</span><span class="stat-label">全話題</span></div>
+    <div class="stat"><span class="stat-num" id="statPool">109</span><span class="stat-label">対象カテゴリ</span></div>
+    <div class="stat"><span class="stat-num" id="statRemaining">109</span><span class="stat-label">まだ引いてない</span></div>
+    <div class="stat"><span class="stat-num" id="statDrawn">0</span><span class="stat-label">引いた回数</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="filter-section" aria-label="カテゴリ絞り込み">
+    <h2 class="section-title">カテゴリで絞り込む</h2>
+    <div class="chips" id="categoryChips"></div>
+  </section>
+
+  <section class="gacha-section" aria-label="ガチャ">
+    <div class="capsule-machine" aria-hidden="true">
+      <div class="machine-top">✦ WADAI GACHA ✦</div>
+      <div class="capsules"><span class="cap c1"></span><span class="cap c2"></span><span class="cap c3"></span><span class="cap c4"></span><span class="cap c5"></span></div>
+    </div>
+
+    <article class="topic-card" id="topicCard">
+      <span class="topic-category" id="topicCategory">準備OK</span>
+      <p class="topic-text" id="topicText">ボタンを押すと、話題が1つ出てくるよ。<br>何が出るかはお楽しみ！</p>
+      <p class="topic-meta" id="topicMeta"></p>
+    </article>
+
+    <button class="gacha-btn" id="gachaBtn" type="button"><span class="gacha-btn-emoji">🎲</span> ガチャを回す</button>
+    <p class="gacha-note" id="gachaNote">全109件からランダム表示（直前と同じ話題は出ません）</p>
+
+    <div class="action-row">
+      <button class="action-btn" id="copyBtn" type="button" disabled>📋 結果をコピー</button>
+      <a class="action-btn share-btn" id="shareLink" href="#" target="_blank" rel="noopener" aria-disabled="true">𝕏 でシェア</a>
+      <button class="action-btn fav-btn" id="favBtn" type="button" disabled>☆ お気に入り</button>
+    </div>
+    <p class="toast" id="toast" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="list-section" aria-label="引いた履歴">
+    <div class="list-head">
+      <h2 class="section-title">🕘 引いた履歴 <span class="count-badge" id="historyCount">0</span></h2>
+      <button class="mini-btn" id="clearHistoryBtn" type="button">履歴を消す</button>
+    </div>
+    <p class="empty-text" id="historyEmpty">まだ引いていません。ガチャを回してみよう！</p>
+    <ul class="topic-list" id="historyList"></ul>
+  </section>
+
+  <section class="list-section" aria-label="お気に入り">
+    <div class="list-head">
+      <h2 class="section-title">⭐ お気に入り <span class="count-badge" id="favCount">0</span></h2>
+      <button class="mini-btn" id="clearFavBtn" type="button">全部外す</button>
+    </div>
+    <p class="empty-text" id="favEmpty">気に入った話題は ☆ ボタンで保存できます（この端末に保存されます）。</p>
+    <ul class="topic-list" id="favList"></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>話題ガチャ — まぶ鯖 Webサービス / 元データ: chat-topic-bot 内蔵話題 全109件</p>
+  <p><a href="https://mabusaba.vercel.app">まぶ鯖 公式サイト</a></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
