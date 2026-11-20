@@ -1,5 +1,5 @@
 // 話題ガチャ service worker: 全コンテンツが同一オリジンなので殻をキャッシュしてオフライン対応にする
-const CACHE = "wadaiya-v1";
+const CACHE = "wadaiya-v3";
 const CORE = [
   "/",
   "/index.html",

@@ -707,3 +707,26 @@ renderHistory();
 renderFavorites();
 updateStats();
 updateActions();
+
+(function initTheme() {
+  var root = document.documentElement;
+  if (!root || !root.getAttribute || !root.setAttribute) return;
+  function apply(theme) {
+    root.setAttribute("data-theme", theme);
+    var btn = document.getElementById("themeToggle");
+    if (btn) btn.textContent = theme === "light" ? "☀️" : "🌙";
+  }
+  var current = root.getAttribute("data-theme");
+  if (current !== "light" && current !== "dark") {
+    try { current = localStorage.getItem("wadaiya-theme"); } catch (e) { current = null; }
+  }
+  apply(current === "light" ? "light" : "dark");
+  var btn = document.getElementById("themeToggle");
+  if (btn && btn.addEventListener) {
+    btn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      apply(next);
+      try { localStorage.setItem("wadaiya-theme", next); } catch (e) { /* 保存できなくても切り替え自体は有効 */ }
+    });
+  }
+})();
