@@ -7,3 +7,7 @@ Discord Bot「Chat Topic Bot」内蔵の話題109件（7カテゴリ）をその
 - 結果のコピーと X シェアに対応
 
 ビルド不要の静的サイト。そのまま Vercel にデプロイできる。外部 API には依存しない。
+
+
+🌐 公開先: [wadaiya.vercel.app](https://wadaiya.vercel.app)
+📜 更新履歴: [CHANGELOG.md](CHANGELOG.md)
