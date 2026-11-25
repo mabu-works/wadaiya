@@ -1,10 +1,18 @@
 # 話題ガチャ
 
 雑談の話題をランダムで引けるガチャ Web アプリ。
-Discord Bot「Chat Topic Bot」内蔵の話題109件（7カテゴリ）をそのまま収録。
 
-🌐 公開先: [wadaiya.vercel.app](https://wadaiya.vercel.app)
-📜 更新履歴: [CHANGELOG.md](CHANGELOG.md)
+| 項目 | 内容 |
+|---|---|
+| バージョン | –（日付管理） |
+| 状態 | 公開中 |
+| 公開先 | [wadaiya.vercel.app](https://wadaiya.vercel.app) |
+| 実装 | HTML / CSS / JavaScript（静的サイト） |
+| 更新履歴 | [CHANGELOG.md](CHANGELOG.md) |
+
+## 📖 概要
+
+Discord Bot「Chat Topic Bot」内蔵の話題109件（7カテゴリ）をそのまま収録。
 
 ## ✨ 機能
 
@@ -29,3 +37,16 @@ Discord Bot「Chat Topic Bot」内蔵の話題109件（7カテゴリ）をその
 
 - ビルド不要の静的サイト。そのまま Vercel にデプロイできる。
 - 外部 API には依存しない。
+
+## 📁 ファイル構成
+
+| パス | 役割 |
+|---|---|
+| `index.html` | ページ本体 |
+| `app.js` | ガチャの動作ロジック |
+| `style.css` | スタイル |
+| `sw.js` | Service Worker |
+| `manifest.webmanifest` | PWA マニフェスト |
+| `icons/` | アイコン |
+| `windows/` | Windows 版（.NET 8 / WinForms） |
+| `vercel.json` | Vercel の設定 |
