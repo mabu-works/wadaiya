@@ -1,6 +1,8 @@
 "use strict";
-/* 話題ガチャ - app.js
-   データ: chat-topic-bot (src/topics.ts) の内蔵話題 全109件を改変せず埋め込み */
+// ==========================================
+// 💬 話題データ
+// ==========================================
+// chat-topic-bot (src/topics.ts) の内蔵話題 全109件を改変せず埋め込み
 
 const TOPICS = [
  {
@@ -441,10 +443,16 @@ const TOPICS = [
  }
 ];
 
+// ------------------------------------------
+// 📌 定数
+// ------------------------------------------
 const CATEGORIES = [...new Set(TOPICS.map((t) => t.category))];
 const FAV_KEY = "wadai-gacha-favorites-v1";
 const ALL = "すべて";
 
+// ------------------------------------------
+// 📊 状態
+// ------------------------------------------
 let selectedCategory = ALL;
 let current = null;        // 現在表示中の話題 {category, text}
 let lastText = null;       // 直前に引いた話題 (連続重複回避用)
@@ -452,6 +460,9 @@ let history = [];          // このセッションで引いた履歴 (新しい
 let favorites = loadFavorites();
 let spinning = false;
 
+// ------------------------------------------
+// 🖥️ DOM 要素
+// ------------------------------------------
 const $ = (id) => document.getElementById(id);
 const els = {
   chips: $("categoryChips"),
@@ -478,33 +489,39 @@ const els = {
   favCount: $("favCount"),
 };
 
+// 📥 お気に入りを読み込む（localStorage。実在する話題だけを残す）
 function loadFavorites() {
   try {
     const raw = localStorage.getItem(FAV_KEY);
     if (!raw) return [];
     const arr = JSON.parse(raw);
     if (!Array.isArray(arr)) return [];
-    // 実在する話題だけを残す
+    // 💬 実在する話題だけを残す
     return arr.filter((x) => x && TOPICS.some((t) => t.text === x.text));
   } catch (e) {
     return [];
   }
 }
+// 💾 お気に入りを保存する
 function saveFavorites() {
   try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch (e) { /* 保存不可でも動作継続 */ }
 }
+// ⭐ 話題がお気に入り済みか調べる
 function isFav(text) { return favorites.some((f) => f.text === text); }
 
+// 🎯 抽選対象の話題一覧を取得する
 function getPool() {
   return selectedCategory === ALL ? TOPICS.slice() : TOPICS.filter((t) => t.category === selectedCategory);
 }
 
+// 💬 トーストを短時間表示する
 function showToast(msg) {
   els.toast.textContent = msg;
   window.clearTimeout(showToast._t);
   showToast._t = window.setTimeout(() => { els.toast.textContent = ""; }, 2600);
 }
 
+// 🏷️ カテゴリーチップを描画する
 function renderChips() {
   els.chips.innerHTML = "";
   const defs = [{ name: ALL, count: TOPICS.length }]
@@ -530,6 +547,7 @@ function renderChips() {
   });
 }
 
+// 📈 統計表示を更新する
 function updateStats() {
   const pool = getPool();
   const drawnInPool = new Set(history.filter((h) => pool.some((p) => p.text === h.text)).map((h) => h.text));
@@ -541,6 +559,7 @@ function updateStats() {
   els.favCount.textContent = String(favorites.length);
 }
 
+// 🔘 コピー・お気に入りボタンの状態を更新する
 function updateActions() {
   const has = !!current;
   els.copyBtn.disabled = !has;
@@ -559,6 +578,7 @@ function updateActions() {
   }
 }
 
+// 🃏 話題カードを表示する
 function displayTopic(topic, count) {
   current = topic;
   els.category.textContent = topic.category;
@@ -570,6 +590,7 @@ function displayTopic(topic, count) {
   updateActions();
 }
 
+// 🎰 ガチャを回して話題を1件引く（シャッフル演出つき）
 function spin() {
   if (spinning) return;
   const pool = getPool();
@@ -579,7 +600,7 @@ function spin() {
   els.card.classList.add("shuffling");
   if (els.machine) els.machine.classList.add("spinning");
 
-  // 最終候補: 直前と同じ話題は避ける (候補が2件以上ある場合)
+  // 💬 最終候補: 直前と同じ話題は避ける (候補が2件以上ある場合)
   let candidates = pool;
   if (pool.length > 1 && lastText) {
     const filtered = pool.filter((t) => t.text !== lastText);
@@ -607,6 +628,7 @@ function spin() {
   }, 70);
 }
 
+// 🕘 履歴一覧を描画する
 function renderHistory() {
   els.historyList.innerHTML = "";
   els.historyEmpty.style.display = history.length ? "none" : "";
@@ -614,6 +636,7 @@ function renderHistory() {
     els.historyList.appendChild(makeListItem(h, false));
   });
 }
+// ⭐ お気に入り一覧を描画する
 function renderFavorites() {
   els.favList.innerHTML = "";
   els.favEmpty.style.display = favorites.length ? "none" : "";
@@ -623,6 +646,7 @@ function renderFavorites() {
   updateStats();
   updateActions();
 }
+// 📝 履歴・お気に入り用の行要素を作る
 function makeListItem(topic, isFavList) {
   const li = document.createElement("li");
   const main = document.createElement("div");
@@ -701,13 +725,18 @@ $("clearFavBtn").addEventListener("click", () => {
   showToast("お気に入りを全部外しました");
 });
 
-// 初期化
+// ------------------------------------------
+// 🚀 初期化
+// ------------------------------------------
 renderChips();
 renderHistory();
 renderFavorites();
 updateStats();
 updateActions();
 
+// ------------------------------------------
+// 🌙 テーマ（ダーク既定＋ライト切り替え）
+// ------------------------------------------
 (function initTheme() {
   var root = document.documentElement;
   if (!root || !root.getAttribute || !root.setAttribute) return;

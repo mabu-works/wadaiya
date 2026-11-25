@@ -11,6 +11,7 @@ namespace Wadaiya
     internal static class Program
     {
         [STAThread]
+        // 🚀 アプリの入口
         private static void Main()
         {
             ApplicationConfiguration.Initialize();
@@ -26,7 +27,7 @@ namespace Wadaiya
 
     internal sealed class MainForm : Form
     {
-        // Web版（wadaiya）と同じ話題データ全109件（chat-topic-bot 内蔵話題）
+        // 💬 Web版（wadaiya）と同じ話題データ全109件（chat-topic-bot 内蔵話題）
         private static readonly (string Category, string Text)[] Topics =
         {
             ("最近のこと", "最近ハマっていることは？"),
@@ -178,6 +179,7 @@ namespace Wadaiya
         private int _spinTicks;
         private bool _suppressDisplay;
 
+        // 🖥️ メインフォームを構築する
         public MainForm()
         {
             Text = "話題ガチャ for Windows";
@@ -403,6 +405,7 @@ namespace Wadaiya
             UpdateActions();
         }
 
+        // 🔘 小さなボタンを作る
         private Button SubButton(string text, int x, int y, int w)
         {
             var b = new Button
@@ -418,6 +421,7 @@ namespace Wadaiya
             return b;
         }
 
+        // 🏷️ セクション見出しラベルを作る
         private Label SectionTitle(string text, int y)
         {
             return new Label
@@ -430,6 +434,7 @@ namespace Wadaiya
             };
         }
 
+        // 📝 空状態メッセージのラベルを作る
         private Label EmptyLabel(string text, int y)
         {
             return new Label
@@ -441,6 +446,7 @@ namespace Wadaiya
             };
         }
 
+        // 🏷️ 話題のカテゴリ一覧を取得する
         private static List<string> Categories()
         {
             var list = new List<string>();
@@ -449,6 +455,7 @@ namespace Wadaiya
             return list;
         }
 
+        // 🎯 抽選対象の話題一覧を取得する
         private List<(string Category, string Text)> GetPool()
         {
             var pool = new List<(string, string)>();
@@ -457,11 +464,13 @@ namespace Wadaiya
             return pool;
         }
 
+        // 💬 トーストを短時間表示する
         private void ShowToast(string msg)
         {
             toastLabel.Text = msg;
         }
 
+        // 📈 統計表示を更新する
         private void UpdateStats()
         {
             var pool = GetPool();
@@ -474,8 +483,10 @@ namespace Wadaiya
             favTitle.Text = $"⭐ お気に入り（{_favorites.Count}）";
         }
 
+        // ⭐ 話題がお気に入り済みか調べる
         private bool IsFav(string text) => _favorites.Exists(f => f.Text == text);
 
+        // 🔘 コピー・お気に入りボタンの状態を更新する
         private void UpdateActions()
         {
             bool has = _current != null;
@@ -494,6 +505,7 @@ namespace Wadaiya
             }
         }
 
+        // 🃏 話題カードを表示する
         private void DisplayTopic((string Category, string Text) topic, int count)
         {
             _current = topic;
@@ -503,13 +515,14 @@ namespace Wadaiya
             UpdateActions();
         }
 
+        // 🎰 ガチャを回す
         private void Spin()
         {
             if (_spinning) return;
             var pool = GetPool();
             if (pool.Count == 0) { ShowToast("対象の話題がありません"); return; }
 
-            // 最終候補: 直前と同じ話題は避ける（候補が2件以上ある場合。Web版と同じ）
+            // 💬 最終候補: 直前と同じ話題は避ける（候補が2件以上ある場合。Web版と同じ）
             var candidates = pool;
             if (pool.Count > 1 && _lastText != null)
             {
@@ -524,6 +537,7 @@ namespace Wadaiya
             spinTimer.Start();
         }
 
+        // 🎰 シャッフル演出の1コマを進める
         private void SpinTimer_Tick(object? sender, EventArgs e)
         {
             _spinTicks++;
@@ -545,6 +559,7 @@ namespace Wadaiya
             cardText.Text = r.Text;
         }
 
+        // 🕘 履歴一覧を描画する
         private void RenderHistory()
         {
             _suppressDisplay = true;
@@ -556,6 +571,7 @@ namespace Wadaiya
             historyList.Visible = _history.Count > 0;
         }
 
+        // ⭐ お気に入り一覧を描画する
         private void RenderFavorites()
         {
             _suppressDisplay = true;
@@ -569,6 +585,7 @@ namespace Wadaiya
             UpdateActions();
         }
 
+        // 📋 表示中の話題をコピーする
         private void CopyCurrent()
         {
             if (_current == null) return;
@@ -583,6 +600,7 @@ namespace Wadaiya
             }
         }
 
+        // ⭐ お気に入りの登録・解除を切り替える
         private void ToggleFavorite()
         {
             if (_current == null) return;
@@ -601,10 +619,15 @@ namespace Wadaiya
             RenderFavorites();
         }
 
-        // ===== お気に入りの保存（Web版 localStorage 相当） =====
+        // ==========================================
+
+        // ⭐ お気に入りの保存（Web版 localStorage 相当）
+
+        // ==========================================
         private static string DataPath =>
             Path.Combine(Application.LocalUserAppDataPath, "wadaiya-favorites.json");
 
+        // 📥 お気に入りを読み込む（実在する話題だけを残す）
         private List<TopicItem> LoadFavorites()
         {
             try
@@ -612,7 +635,7 @@ namespace Wadaiya
                 if (!File.Exists(DataPath)) return new List<TopicItem>();
                 var arr = JsonSerializer.Deserialize<List<TopicItem>>(File.ReadAllText(DataPath));
                 if (arr == null) return new List<TopicItem>();
-                // 実在する話題だけを残す（Web版と同じ）
+                // 💬 実在する話題だけを残す（Web版と同じ）
                 var valid = new List<TopicItem>();
                 foreach (var x in arr)
                 {
@@ -625,6 +648,7 @@ namespace Wadaiya
             catch { return new List<TopicItem>(); }
         }
 
+        // 💾 お気に入りを保存する
         private void SaveFavorites()
         {
             try
